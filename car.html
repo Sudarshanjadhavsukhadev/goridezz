@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Details - DriveHub</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+<!-- Font Awesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #111, #222);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    animation: bgMove 20s linear infinite alternate;
+  }
+
+  @keyframes bgMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 100% 100%; }
+  }
+
+  /* Header */
+  header {
+    background: rgba(30, 30, 30, 0.8);
+    color: #ffd700;
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,215,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  header h1 i {
+    margin-right: 10px;
+    color: #ffd700;
+    animation: glow 2s infinite alternate;
+  }
+
+  @keyframes glow {
+    from { text-shadow: 0 0 5px #ffd700, 0 0 10px #ffeb3b; }
+    to { text-shadow: 0 0 10px #ffd700, 0 0 20px #ffeb3b; }
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+  }
+
+  nav a {
+    color: #ffd700;
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 16px;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  nav a i {
+    margin-right: 5px;
+  }
+
+  nav a:hover { color: #fff; }
+
+  /* Container */
+  .container {
+    max-width: 900px;
+    margin: 50px auto;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.7);
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,215,0,0.2);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Glow border animation */
+  .container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, #ffd700, #ffae00, #ffd700, #ffae00);
+    background-size: 400% 400%;
+    animation: borderGlow 6s linear infinite;
+    filter: blur(20px);
+    opacity: 0.4;
+    z-index: 0;
+  }
+
+  @keyframes borderGlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .car-image {
+    flex: 1 1 400px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  .car-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    border-radius: 0;
+  }
+
+  .car-image img:hover {
+    transform: scale(1.07) rotateZ(1deg);
+    box-shadow: 0 0 25px #ffd700aa;
+  }
+
+  .car-details {
+    flex: 1 1 400px;
+    padding: 40px;
+    z-index: 1;
+    position: relative;
+  }
+
+  .car-details h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #ffd700;
+    text-shadow: 0 0 10px #ffd700;
+  }
+
+  .car-details p {
+    margin: 10px 0;
+    color: #ccc;
+    font-size: 15px;
+  }
+
+  .price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffd700;
+    margin-top: 20px;
+    text-shadow: 0 0 5px #ffd700;
+  }
+
+  .availability {
+    margin: 15px 0;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .available { color: #00ff00; }
+  .not-available { color: #ff4d4d; }
+
+  .book-btn {
+    background: linear-gradient(45deg, #ffd700, #ffae00);
+    color: #111;
+    border: none;
+    padding: 16px 25px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.4s ease;
+    width: 100%;
+    margin-top: 25px;
+    box-shadow: 0 4px 15px #ffd70033;
+  }
+
+  .book-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 20px #ffd700, 0 0 40px #ffae00;
+  }
+
+  footer {
+    background: #111;
+    color: #ccc;
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 14px;
+    margin-top: auto;
+  }
+
+  .social-icons {
+    margin: 15px 0;
+  }
+
+  .social-icons a {
+    color: #ffd700;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 20px;
+    transition: 0.3s;
+  }
+
+  .social-icons a:hover { color: #fff; }
+
+  .address {
+    margin-top: 10px;
+    color: #aaa;
+    font-size: 14px;
+  }
+
+  @media (max-width: 768px) {
+    .container { flex-direction: column; }
+    header { flex-direction: column; text-align: center; }
+    nav { margin-top: 10px; }
+  }
+</style>
+</head>
+
+<body>
+<header>
+  <h1><i class="fas fa-car-side"></i> DriveHub</h1>
+  <nav>
+    <a href="home.html"><i class="fas fa-home"></i> Home</a>
+    <a href="#"><i class="fas fa-book"></i> My Bookings</a>
+    <a href="#"><i class="fas fa-user"></i> Profile</a>
+    <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="car-image">
+    <img src="https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Honda City">
+  </div>
+
+  <div class="car-details">
+    <h2>Honda City ZX</h2>
+    <p><strong>Type:</strong> Sedan</p>
+    <p><strong>Transmission:</strong> Automatic</p>
+    <p><strong>Fuel Type:</strong> Petrol</p>
+    <p><strong>Seating Capacity:</strong> 5 Seater</p>
+    <p><strong>Mileage:</strong> 18 km/l</p>
+    <p><strong>Air Conditioning:</strong> Yes</p>
+    <p><strong>Bluetooth & GPS:</strong> Available</p>
+    <p class="price">₹2,500/day</p>
+    <p class="availability available">Available for Rent</p>
+    <button class="book-btn" id="bookBtn">Book Now</button>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 DriveHub | Designed by Piyush Jadhav</p>
+  <div class="social-icons">
+    <a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook"></i></a>
+    <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/919999999999" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  </div>
+  <div class="address">
+    <p>📍 DriveHub HQ, 2nd Floor, Business Park, Mumbai, India - 400001</p>
+    <p>📞 +91 99999 99999 | ✉️ support@drivehub.com</p>
+  </div>
+</footer>
+
+<script>
+  const isAvailable = true; // Change to false to simulate not available
+  const availability = document.querySelector('.availability');
+  const bookBtn = document.getElementById('bookBtn');
+
+  if (!isAvailable) {
+    availability.textContent = "Currently Not Available";
+    availability.classList.remove("available");
+    availability.classList.add("not-available");
+    bookBtn.style.display = "none";
+  }
+
+  bookBtn.addEventListener('click', () => {
+    window.location.href = "booking.html";
+  });
+</script>
+</body>
+</html>

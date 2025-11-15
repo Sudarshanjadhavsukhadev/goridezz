@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DriveHub - Login & Signup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at center, #0d0d0d, #111);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .streak {
+      position: absolute;
+      width: 2px;
+      height: 100vh;
+      background: linear-gradient(to bottom, #ffd700, transparent);
+      opacity: 0.2;
+      animation: streakMove linear infinite;
+    }
+
+    @keyframes streakMove {
+      0% { transform: translateY(-100vh) skewX(10deg); }
+      100% { transform: translateY(100vh) skewX(10deg); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      background: rgba(0,0,0,0.6);
+      padding: 50px 40px;
+      border-radius: 20px;
+      width: 380px;
+      text-align: center;
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255,215,0,0.6);
+      box-shadow: 0 0 30px rgba(255,215,0,0.5);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 50px rgba(255,215,0,0.8);
+    }
+
+    h2 {
+      margin-bottom: 30px;
+      font-size: 32px;
+      color: #ffd700;
+      text-shadow: 0 0 15px #ffd700, 0 0 30px #ffae00;
+    }
+
+    .input-field {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-field label {
+      font-size: 14px;
+      color: #ccc;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .input-field input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .input-field input::placeholder {
+      color: #aaa;
+    }
+
+    .input-field input:focus {
+      border-color: #ffd700;
+      box-shadow: 0 0 15px #ffd700, 0 0 30px #ffae00;
+      background: rgba(255,255,255,0.15);
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #ffd700, #ffae00);
+      color: #111;
+      border: none;
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      transition: 0.4s;
+      margin-top: 10px;
+      text-shadow: 0 0 5px #fff;
+    }
+
+    .btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 20px #ffd700, 0 0 40px #ffae00;
+    }
+
+    .extra-links {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .extra-links a {
+      color: #ffd700;
+      text-decoration: none;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .extra-links a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    .error {
+      color: #ff4c4c;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .success {
+      color: #4caf50;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Neon streaks -->
+  <div class="streak" style="left:5%; animation-duration:15s;"></div>
+  <div class="streak" style="left:20%; animation-duration:12s;"></div>
+  <div class="streak" style="left:35%; animation-duration:18s;"></div>
+  <div class="streak" style="left:50%; animation-duration:14s;"></div>
+  <div class="streak" style="left:65%; animation-duration:16s;"></div>
+  <div class="streak" style="left:80%; animation-duration:20s;"></div>
+
+  <div class="container">
+    <!-- LOGIN FORM -->
+    <form id="loginForm">
+      <h2>DriveHub Login</h2>
+      <div class="input-field">
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" placeholder="Enter your username" required>
+      </div>
+      <div class="input-field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+      </div>
+      <button type="submit" class="btn">Login</button>
+      <p id="loginMessage"></p>
+      <div class="extra-links">
+        <p>Don’t have an account? <a id="showSignup">Sign up</a></p>
+        <p><a href="#">Forgot password?</a></p>
+      </div>
+    </form>
+
+    <!-- SIGNUP FORM -->
+    <form id="signupForm" class="hidden">
+      <h2>Create Account</h2>
+      <div class="input-field">
+        <label for="signupUsername">Username</label>
+        <input type="text" id="signupUsername" placeholder="Choose a username" required>
+      </div>
+      <div class="input-field">
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" placeholder="Create a password" required>
+      </div>
+      <div class="input-field">
+        <label for="signupConfirm">Confirm Password</label>
+        <input type="password" id="signupConfirm" placeholder="Confirm your password" required>
+      </div>
+      <button type="submit" class="btn">Sign Up</button>
+      <p id="signupMessage"></p>
+      <div class="extra-links">
+        <p>Already have an account? <a id="showLogin">Login</a></p>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    const showSignup = document.getElementById('showSignup');
+    const showLogin = document.getElementById('showLogin');
+    const loginMessage = document.getElementById('loginMessage');
+    const signupMessage = document.getElementById('signupMessage');
+
+    // Default admin account
+    if (!localStorage.getItem("users")) {
+      localStorage.setItem("users", JSON.stringify([{ username: "admin", password: "12345" }]));
+    }
+
+    showSignup.addEventListener('click', () => {
+      loginForm.classList.add('hidden');
+      signupForm.classList.remove('hidden');
+      loginMessage.textContent = "";
+    });
+
+    showLogin.addEventListener('click', () => {
+      signupForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+      signupMessage.textContent = "";
+    });
+
+    // SIGNUP
+    signupForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('signupUsername').value.trim();
+      const password = document.getElementById('signupPassword').value.trim();
+      const confirm = document.getElementById('signupConfirm').value.trim();
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      if (users.some(user => user.username === username)) {
+        signupMessage.textContent = "❌ Username already exists!";
+        signupMessage.className = "error";
+        return;
+      }
+
+      if (password !== confirm) {
+        signupMessage.textContent = "❌ Passwords do not match!";
+        signupMessage.className = "error";
+        return;
+      }
+
+      users.push({ username, password });
+      localStorage.setItem("users", JSON.stringify(users));
+
+      signupMessage.textContent = "✔ Account created successfully!";
+      signupMessage.className = "success";
+
+      setTimeout(() => {
+        signupForm.classList.add('hidden');
+        loginForm.classList.remove('hidden');
+        signupMessage.textContent = "";
+      }, 1500);
+    });
+
+    // LOGIN
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      const validUser = users.find(
+        user => user.username === username && user.password === password
+      );
+
+      if (validUser) {
+        loginMessage.textContent = "✔ Login successful! Redirecting...";
+        loginMessage.className = "success";
+
+        setTimeout(() => {
+          window.location.href = "cars.html"; 
+        }, 1200);
+      } else {
+        loginMessage.textContent = "❌ Incorrect username or password!";
+        loginMessage.className = "error";
+      }
+    });
+  </script>
+
+</body>
+</html>

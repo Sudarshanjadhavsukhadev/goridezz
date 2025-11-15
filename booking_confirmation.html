@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DriveHub - Booking Confirmation</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top left, #0d0d0d 0%, #1a1a1a 100%);
+    color: #ffd700;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 80px auto;
+    background: rgba(17,17,17,0.95);
+    padding: 40px;
+    border-radius: 25px;
+    border: 1px solid rgba(255,215,0,0.4);
+    box-shadow: 0 0 40px rgba(255,215,0,0.2);
+  }
+
+  h1 {
+    text-align: center;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255,215,0,0.6);
+    margin-bottom: 30px;
+  }
+
+  .row {
+    margin: 15px 0;
+  }
+
+  .label {
+    font-weight: 600;
+    font-size: 16px;
+    color: #fff;
+  }
+
+  .value {
+    font-size: 17px;
+    color: #ffd700;
+  }
+
+  img {
+    width: 180px;
+    border-radius: 12px;
+    margin-top: 10px;
+    border: 1px solid #ffd700;
+    box-shadow: 0 0 20px rgba(255,215,0,0.3);
+  }
+
+  .back-btn {
+    display: block;
+    margin: 25px auto;
+    padding: 12px 25px;
+    font-size: 18px;
+    border: none;
+    background: #ffd700;
+    color: #111;
+    font-weight: 700;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .back-btn:hover {
+    background: #e6c200;
+    transform: scale(1.05);
+  }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+  <h1>Booking Confirmed 🎉</h1>
+
+  <div id="details">
+    <p style="text-align:center; color:white;">Loading booking details...</p>
+  </div>
+
+  <button class="back-btn" onclick="window.location.href='home.html'">Back to Home</button>
+</div>
+
+<script>
+  const BASE_URL = "http://localhost:5000";
+
+  // Get bookingId from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const bookingId = urlParams.get("bookingId");
+
+  async function loadBooking() {
+    if (!bookingId) {
+      document.getElementById("details").innerHTML = "<h3 style='color:red;'>Invalid Booking ID</h3>";
+      return;
+    }
+
+    try {
+      const res = await fetch(`${BASE_URL}/api/bookings/${bookingId}`);
+      const data = await res.json();
+
+      if (!data.success) {
+        document.getElementById("details").innerHTML = "<h3 style='color:red;'>Booking not found</h3>";
+        return;
+      }
+
+      const b = data.booking;
+
+      document.getElementById("details").innerHTML = `
+        <div class="row"><span class="label">Booking ID:</span> <span class="value">${b.bookingId}</span></div>
+        <div class="row"><span class="label">Name:</span> <span class="value">${b.name}</span></div>
+        <div class="row"><span class="label">Contact:</span> <span class="value">${b.contact}</span></div>
+        <div class="row"><span class="label">Aadhaar:</span> <span class="value">${b.aadhaar}</span></div>
+        <div class="row"><span class="label">Driving License:</span> <span class="value">${b.license}</span></div>
+
+        <div class="row">
+          <span class="label">Aadhaar Photo:</span><br>
+          <img src="${b.aadhaarPhoto}" alt="Aadhaar Photo"/>
+        </div>
+
+        <div class="row">
+          <span class="label">License Photo:</span><br>
+          <img src="${b.licensePhoto}" alt="License Photo"/>
+        </div>
+
+        <div class="row"><span class="label">Pickup:</span> <span class="value">${b.pickup}</span></div>
+        <div class="row"><span class="label">Drop:</span> <span class="value">${b.drop}</span></div>
+
+        <div class="row"><span class="label">Pickup Date:</span> <span class="value">${b.pickupDate}</span></div>
+        <div class="row"><span class="label">Return Date:</span> <span class="value">${b.returnDate}</span></div>
+
+        <div class="row"><span class="label">Payment Transaction ID:</span>
+          <span class="value">${b.txnId}</span>
+        </div>
+      `;
+    } catch (err) {
+      console.error(err);
+      document.getElementById("details").innerHTML = "<h3 style='color:red;'>Server error</h3>";
+    }
+  }
+
+  loadBooking();
+</script>
+
+</body>
+</html>

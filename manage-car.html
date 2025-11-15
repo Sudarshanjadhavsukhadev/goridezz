@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DriveHub - Manage Cars</title>
+<style>
+:root{
+  --bg:#0d0d0d;
+  --panel:#111;
+  --accent:#ffdd44;
+  --gold-grad: linear-gradient(90deg,#d4a017,#ffd700);
+  --muted:#888;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Poppins",sans-serif;
+  background: linear-gradient(-45deg, #0d0d0d, #111111, #0a0a0a, #121212);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  color:#fff;
+  min-height:100vh;
+}
+
+@keyframes gradientBG{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* Back Button */
+.back-btn{
+  position:fixed;
+  top:18px;
+  left:18px;
+  background:var(--accent);
+  color:#000;
+  border:none;
+  padding:10px 14px;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(255,221,68,0.3);
+  z-index:40;
+  transition:0.3s;
+}
+.back-btn:hover{transform:translateY(-2px) scale(1.05);}
+
+/* Container */
+.container{
+  max-width:1100px;
+  margin:60px auto 80px;
+  padding:28px;
+  background: rgba(17,17,17,0.85);
+  border-radius:20px;
+  box-shadow: 0 0 40px rgba(255,221,68,0.2);
+  backdrop-filter: blur(6px);
+}
+
+h1{
+  text-align:center;
+  color:var(--accent);
+  text-shadow:0 0 12px rgba(255,221,68,0.25);
+  margin:0 0 18px 0;
+  font-size:32px;
+}
+
+/* Top Actions */
+.top-actions{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+  margin-bottom:20px;
+}
+.add-btn{
+  background:var(--gold-grad);
+  color:#000;
+  padding:12px 22px;
+  border-radius:12px;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 8px 28px rgba(255,215,0,0.2);
+  transition:0.3s;
+}
+.add-btn:hover{transform:scale(1.05); box-shadow:0 0 30px rgba(255,215,0,0.7)}
+
+/* Table */
+.table-wrap{
+  margin-top:22px;
+  background:var(--panel);
+  border:2px solid rgba(255,221,68,0.08);
+  padding:16px;
+  border-radius:14px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.6);
+  overflow-x:auto;
+}
+table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0 10px;
+  color:#fff;
+}
+thead th{
+  text-align:left;
+  padding:12px 10px;
+  color:var(--accent);
+  font-weight:700;
+  font-size:14px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  text-shadow:0 0 5px rgba(255,215,0,0.5);
+}
+tbody tr{
+  background: rgba(25,25,25,0.8);
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-radius:10px;
+  box-shadow:0 3px 12px rgba(255,215,0,0.05);
+}
+tbody tr:hover{
+  transform:translateY(-5px);
+  box-shadow:0 5px 20px rgba(255,215,0,0.3);
+}
+tbody td{
+  padding:12px 10px;
+  vertical-align:middle;
+  font-size:14px;
+  color:#ddd;
+}
+.thumb{
+  width:90px;
+  height:60px;
+  object-fit:cover;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:#000;
+}
+.muted{color:var(--muted); font-size:13px}
+.del-btn{
+  background:#e63946;
+  border:none;
+  color:#fff;
+  padding:8px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.3s;
+}
+.del-btn:hover{opacity:0.9; transform:scale(1.05);}
+
+/* Empty State */
+.empty{
+  padding:40px;
+  text-align:center;
+  color:var(--muted);
+}
+
+/* Popup */
+.popup-bg{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(6px);
+  justify-content:center;
+  align-items:center;
+  z-index:100;
+  animation: fadeIn 0.4s ease forwards;
+}
+@keyframes fadeIn{from{opacity:0} to{opacity:1}}
+.popup-box{
+  width:420px;
+  background:var(--panel);
+  border-radius:16px;
+  padding:20px;
+  border:2px solid rgba(255,221,68,0.2);
+  box-shadow:0 20px 60px rgba(0,0,0,0.7);
+  position:relative;
+  animation: popUp 0.3s ease forwards;
+}
+@keyframes popUp{from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1}}
+.close-x{
+  position:absolute;
+  top:10px;
+  right:12px;
+  font-size:22px;
+  color:var(--accent);
+  cursor:pointer;
+  transition:0.3s;
+}
+.close-x:hover{color:#ff6b6b}
+
+.step-title{
+  color:var(--accent);
+  font-size:18px;
+  margin:6px 0 12px 0;
+  text-align:left;
+}
+
+.input, select{
+  width:100%;
+  padding:11px 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,221,68,0.2);
+  background:#111;
+  color:#fff;
+  outline:none;
+  font-size:15px;
+  margin-bottom:12px;
+  transition:0.3s;
+}
+.input:focus, select:focus{border-color:var(--accent); box-shadow:0 0 10px rgba(255,221,68,0.5)}
+
+.file-preview{
+  width:100%;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin-top:8px;
+}
+.file-preview img{
+  width:84px;
+  height:56px;
+  object-fit:cover;
+  border-radius:6px;
+  border:2px solid rgba(255,221,68,0.3);
+  box-shadow:0 0 10px rgba(255,221,68,0.3);
+}
+
+.wizard-controls{
+  margin-top:10px;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+.btn-secondary{
+  background:#333;
+  color:#fff;
+  border:none;
+  padding:10px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.3s;
+}
+.btn-secondary:hover{transform:scale(1.05);}
+
+.btn-primary{
+  background:var(--gold-grad);
+  color:#000;
+  border:none;
+  padding:10px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:700;
+  transition:0.3s;
+}
+.btn-primary:hover{transform:scale(1.05); box-shadow:0 0 20px rgba(255,215,0,0.6)}
+
+/* Small screens */
+@media (max-width:520px){
+  .popup-box{width:92%}
+  .thumb{width:70px;height:50px}
+}
+</style>
+</head>
+<body>
+
+<!-- Back to Admin Dashboard -->
+<button class="back-btn" onclick="location.href='admin-dashboard.html'">⬅ Back</button>
+
+<div class="container">
+  <h1>Manage Cars 🚗</h1>
+
+  <div class="top-actions">
+    <button class="add-btn" onclick="openWizard()">+ Add New Car</button>
+  </div>
+
+  <div class="table-wrap" id="tableWrap">
+    <table id="carsTable" aria-live="polite">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Transmission</th>
+          <th>Seats</th>
+          <th>Fuel</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="carsTbody"></tbody>
+    </table>
+    <div id="emptyState" class="empty" style="display:none;">
+      No cars added yet. Click "Add New Car" to start.
+    </div>
+  </div>
+</div>
+
+<!-- Popup Wizard -->
+<div class="popup-bg" id="popup">
+  <div class="popup-box" role="dialog" aria-modal="true" aria-labelledby="stepTitle">
+    <div class="close-x" title="Close (Esc)" onclick="closeWizard()">×</div>
+
+    <div id="stepContent">
+      <div id="stepHeader" class="step-title">Step 1 — Enter Car Name</div>
+
+      <div id="step1">
+        <input id="inpName" class="input" type="text" placeholder="e.g. Honda City" />
+      </div>
+
+      <div id="step2" style="display:none">
+        <select id="inpTransmission" class="input">
+          <option value="">Select Transmission</option>
+          <option value="Manual">Manual</option>
+          <option value="Automatic">Automatic</option>
+        </select>
+      </div>
+
+      <div id="step3" style="display:none">
+        <input id="inpSeats" class="input" type="number" min="1" placeholder="Seating capacity (e.g. 5)" />
+      </div>
+
+      <div id="step4" style="display:none">
+        <select id="inpFuel" class="input">
+          <option value="">Select Fuel Type</option>
+          <option value="Petrol">Petrol</option>
+          <option value="Diesel">Diesel</option>
+          <option value="CNG">CNG</option>
+          <option value="Electric">Electric</option>
+        </select>
+      </div>
+
+      <div id="step5" style="display:none">
+        <label style="display:block;text-align:left;color:var(--muted);font-size:13px;margin-bottom:6px">Upload Car Image</label>
+        <input id="inpImage" class="input" type="file" accept="image/*" />
+        <div class="file-preview" id="filePreview" style="display:none">
+          <img id="previewImg" src="" alt="preview" />
+          <div class="muted" id="previewName"></div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;text-align:left">
+          Tip: choose a clear photo (JPG/PNG). Image is stored locally in your browser.
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-controls">
+      <button class="btn-secondary" id="backStepBtn" onclick="prevStep()" style="visibility:hidden">Back</button>
+      <div style="flex:1"></div>
+      <button class="btn-secondary" id="nextStepBtn" onclick="nextStep()">Next</button>
+      <button class="btn-primary" id="submitBtn" onclick="submitCar()" style="display:none">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Your existing JS code goes here (unchanged)
+</script>
+
+</body>
+</html>

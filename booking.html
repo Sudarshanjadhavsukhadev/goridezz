@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DriveHub - Car Booking</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* Cinematic Background */
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top left, #0d0d0d 0%, #1a1a1a 100%);
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  /* Moving light effect */
+  body::before {
+    content: "";
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.05) 0%, transparent 60%);
+    animation: moveLight 15s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes moveLight {
+    0% { transform: translate(0,0) rotate(0deg); }
+    50% { transform: translate(30px, 30px) rotate(180deg); }
+    100% { transform: translate(0,0) rotate(360deg); }
+  }
+
+  header {
+    width: 95%;
+    background: linear-gradient(90deg, #111, #222, #111);
+    color: #ffd700;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  nav a {
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 6px 0;
+  }
+
+  nav a::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #ffd700;
+    transition: width 0.3s ease;
+  }
+
+  nav a:hover {
+    color: #fff;
+  }
+
+  nav a:hover::after {
+    width: 100%;
+  }
+
+  main {
+    margin-top: 140px;
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+  }
+
+  /* Cinematic Card */
+  .form-container {
+    background: rgba(17,17,17,0.95);
+    padding: 50px 45px;
+    border-radius: 25px;
+    box-shadow: 0 0 80px rgba(255, 215, 0, 0.2);
+    width: 100%;
+    max-width: 650px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeIn 1s forwards;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h2 {
+    color: #ffd700;
+    text-align: center;
+    margin-bottom: 35px;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+    font-size: 34px;
+  }
+
+  h3 {
+    color: #ffd700;
+    border-bottom: 2px solid #ffd700;
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-bottom: 25px;
+    font-size: 22px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  }
+
+  label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: 600;
+  }
+
+  input {
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 12px;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+  }
+
+  input:focus {
+    background: #252525;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  }
+
+  input::placeholder { color: #aaa; }
+
+  input[type="file"] { background: none; padding: 6px; }
+
+  .btn {
+    width: 100%;
+    margin-top: 25px;
+    background: #ffd700;
+    color: #111;
+    border: none;
+    padding: 16px;
+    border-radius: 15px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+
+  .btn:hover {
+    background: #e6c200;
+    transform: scale(1.05);
+    box-shadow: 0 0 35px rgba(255, 215, 0, 0.7);
+  }
+
+  #upiSection {
+    text-align: center;
+    margin-top: 30px;
+    padding: 25px;
+    background: rgba(26,26,26,0.9);
+    border-radius: 18px;
+    border: 1px solid #ffd700;
+    box-shadow: 0 0 35px rgba(255, 215, 0, 0.2);
+  }
+
+  #upiSection img {
+    width: 220px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+    transition: transform 0.3s ease;
+  }
+
+  #upiSection img:hover { transform: scale(1.05); }
+
+  #confirmPayment {
+    margin-top: 15px;
+    background: #28a745;
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(40,167,69,0.3);
+  }
+
+  #confirmPayment:hover {
+    background: #218838;
+    transform: scale(1.05);
+    box-shadow: 0 0 35px rgba(40,167,69,0.5);
+  }
+
+  #txnIdDisplay {
+    color: #00ff99;
+    font-weight: 700;
+    margin-top: 15px;
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    header { flex-direction: column; align-items: flex-start; padding: 15px 25px; }
+    nav { width: 100%; justify-content: flex-start; gap: 15px; margin-top: 10px; }
+    nav a { display: block; margin-bottom: 5px; }
+    .form-container { padding: 35px 25px; }
+    #upiSection img { width: 180px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🚗 DriveHub</div>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="bookings.html">My Bookings</a>
+    <a href="profile.html">Profile</a>
+    <a href="index.html">Logout</a>
+  </nav>
+</header>
+
+<main>
+  <div class="form-container">
+    <h2>Car Booking Form</h2>
+    <form id="bookingForm">
+      <h3>Personal Information</h3>
+      <label>Full Name</label>
+      <input type="text" id="name" placeholder="Enter your full name" required>
+      <label>Contact Number</label>
+      <input type="text" id="contact" placeholder="Enter contact number" required>
+      <label>Aadhaar Card Number</label>
+      <input type="text" id="aadhar" placeholder="Enter Aadhaar Number" required>
+      <label>Upload Aadhaar Card Photo</label>
+      <input type="file" id="aadharPhoto" accept="image/*" required>
+      <label>Driving License Number</label>
+      <input type="text" id="license" placeholder="Enter License Number" required>
+      <label>Upload License Photo</label>
+      <input type="file" id="licensePhoto" accept="image/*" required>
+
+      <h3>Booking Details</h3>
+      <label>Pickup Location</label>
+      <input type="text" id="pickup" placeholder="Enter pickup location" required>
+      <label>Drop Location</label>
+      <input type="text" id="drop" placeholder="Enter drop location" required>
+      <label>Pickup Date</label>
+      <input type="date" id="pickupDate" required>
+      <label>Return Date</label>
+      <input type="date" id="returnDate" required>
+
+      <h3>Payment</h3>
+      <div id="upiSection">
+        <img src="qrcode.jpg" alt="UPI QR Code">
+        <p>Scan the QR and make ₹500 advance payment</p>
+        <button type="button" id="confirmPayment">I’ve Paid ₹500</button>
+        <div id="txnIdDisplay"></div>
+      </div>
+
+      <button type="submit" class="btn" disabled id="confirmBtn">Confirm Booking</button>
+    </form>
+  </div>
+</main>
+
+<script>
+  const BASE_URL = "http://localhost:5000";
+
+  let enteredTxnId = "";
+
+  // PAYMENT CONFIRMATION
+  document.getElementById("confirmPayment").addEventListener("click", function () {
+    enteredTxnId = prompt("Please enter your UPI Transaction ID:");
+    if (enteredTxnId && enteredTxnId.trim() !== "") {
+      alert("✅ Payment Verified!\nTransaction ID: " + enteredTxnId);
+      document.getElementById("txnIdDisplay").innerText = "Transaction ID: " + enteredTxnId;
+      document.getElementById("txnIdDisplay").style.display = "block";
+
+      document.getElementById("confirmBtn").disabled = false;
+      this.disabled = true;
+      this.innerText = "Payment Verified";
+      this.style.background = "#444";
+    } else {
+      alert("⚠️ Transaction ID is required to verify your payment.");
+    }
+  });
+
+  // Convert uploaded file to Base64
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // FINAL BOOKING SUBMIT
+  document.getElementById("bookingForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const aadharPhotoFile = document.getElementById("aadharPhoto").files[0];
+    const licensePhotoFile = document.getElementById("licensePhoto").files[0];
+
+    const aadharPhotoBase64 = await fileToBase64(aadharPhotoFile);
+    const licensePhotoBase64 = await fileToBase64(licensePhotoFile);
+
+    const bookingData = {
+      name: document.getElementById("name").value,
+      contact: document.getElementById("contact").value,
+      aadhaar: document.getElementById("aadhar").value,
+      aadhaarPhoto: aadharPhotoBase64,
+      license: document.getElementById("license").value,
+      licensePhoto: licensePhotoBase64,
+      pickup: document.getElementById("pickup").value,
+      drop: document.getElementById("drop").value,
+      pickupDate: document.getElementById("pickupDate").value,
+      returnDate: document.getElementById("returnDate").value,
+      txnId: enteredTxnId
+    };
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bookingData)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("Booking Completed! Booking ID: " + result.bookingId);
+        window.location.href = "confirmation.html?bookingId=" + result.bookingId;
+      } else {
+        alert("❌ Booking failed: " + result.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server error! Check console.");
+    }
+  });
+</script>
+
+
+</body>
+</html>
