@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DriveHub - Luxury Car Rentals</title>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500&display=swap');
 
@@ -21,7 +22,6 @@ body {
   perspective: 1200px;
 }
 
-/* Scene */
 .scene {
   position: relative;
   width: 100%;
@@ -29,18 +29,19 @@ body {
   overflow: hidden;
 }
 
-/* Road with neon reflections */
+/* ROAD */
 .road {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 300px;
+  height: 30vh;
   background: linear-gradient(to bottom, #111 0%, #000 100%);
   transform-origin: bottom;
   transform: rotateX(65deg);
   z-index: 2;
   overflow: hidden;
 }
+
 .lane {
   position: absolute;
   top: 0;
@@ -55,12 +56,13 @@ body {
   animation: moveLane 0.25s linear infinite;
   transform: translateX(-50%);
 }
+
 @keyframes moveLane {
   0% {background-position-y: 0;}
   100% {background-position-y: 80px;}
 }
 
-/* Light streaks */
+/* LIGHT STREAKS */
 .light-streak {
   position: absolute;
   width: 300%;
@@ -72,12 +74,13 @@ body {
   transform: rotateX(65deg);
   z-index: 1;
 }
+
 @keyframes streakMove {
   0% {transform: translateX(-100%) rotateX(65deg);}
   100% {transform: translateX(100%) rotateX(65deg);}
 }
 
-/* Fog */
+/* FOG */
 .fog {
   position: absolute;
   bottom: 0;
@@ -87,19 +90,20 @@ body {
   animation: fogMove 15s linear infinite;
   z-index: 3;
 }
+
 @keyframes fogMove {
   0% {transform: translateX(0);}
   50% {transform: translateX(50px);}
   100% {transform: translateX(0);}
 }
 
-/* Car */
+/* CAR */
 .car {
   position: absolute;
-  bottom: 60px;
+  bottom: 10vh;
   left: 50%;
   width: 350px;
-  transform: translateX(-50%) scale(0.6);
+  transform: translateX(-50%) scale(0.7);
   filter: drop-shadow(0 20px 30px rgba(0,0,0,0.7));
   animation: carZoom 5s ease-in-out forwards;
   z-index: 5;
@@ -110,7 +114,7 @@ body {
   position: absolute;
   width: 50px;
   height: 50px;
-  bottom: 70px;
+  bottom: calc(10vh + 20px);
   left: 50%;
   transform: translateX(-50%);
   background: radial-gradient(circle, #ff6600, #ff3300, transparent);
@@ -119,6 +123,7 @@ body {
   animation: flameFlicker 0.3s infinite;
   z-index: 4;
 }
+
 @keyframes flameFlicker {
   0% {transform: translateX(-50%) scale(1);}
   50% {transform: translateX(-50%) scale(1.2);}
@@ -131,25 +136,26 @@ body {
   100% {transform: translateX(-50%) scale(1.2); opacity: 1;}
 }
 
-/* Glow Text */
+/* TEXT */
 .glow-text {
   position: absolute;
-  top: 20%;
+  top: 18%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 75px;
+  font-size: clamp(32px, 6vw, 75px);
   font-family: 'Playfair Display', serif;
   color: #ffd700;
   text-shadow: 0 0 25px #ffd700, 0 0 50px #ffd70055, 0 0 80px #ffd70033;
   opacity: 0;
   animation: fadeInText 2s ease-in-out 1s forwards;
 }
+
 .tagline {
   position: absolute;
-  top: 38%;
+  top: 33%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 36px;
+  font-size: clamp(18px, 4vw, 36px);
   font-weight: 500;
   color: #ffffffcc;
   text-shadow: 0 0 10px #000;
@@ -162,14 +168,14 @@ body {
   to {opacity: 1; transform: translate(-50%, -50%) scale(1);}
 }
 
-/* Enter Button with shimmer */
+/* BUTTON */
 .enter-btn {
   position: absolute;
-  top: 65%;
+  top: 60%;
   left: 50%;
   transform: translateX(-50%);
-  padding: 18px 40px;
-  font-size: 22px;
+  padding: 15px 35px;
+  font-size: clamp(18px, 4vw, 22px);
   background: linear-gradient(45deg, #ffd700, #ffe066, #ffd700);
   color: #1a1a1a;
   border: none;
@@ -182,20 +188,35 @@ body {
   z-index: 6;
   background-size: 200% 200%;
 }
+
 .enter-btn:hover {
   animation: shimmer 1.5s linear infinite;
   box-shadow: 0 0 30px #ffd700aa, 0 0 60px #ffd70055 inset;
-  transform: scale(1.1);
+  transform: translateX(-50%) scale(1.1);
 }
+
 @keyframes shimmer {
   0% {background-position: 0% 50%;}
   100% {background-position: 100% 50%;}
 }
+
+/* RESPONSIVE FIXES */
+@media (max-width: 768px) {
+  .car { width: 230px; bottom: 12vh; transform: translateX(-50%) scale(1); }
+  .flame { width: 35px; height: 35px; bottom: calc(12vh + 15px); }
+  .road { height: 26vh; }
+}
+
+@media (max-width: 480px) {
+  .car { width: 200px; bottom: 14vh; }
+  .road { height: 24vh; }
+  .enter-btn { top: 68%; }
+}
 </style>
 </head>
+
 <body>
 
-<!-- Engine Sound -->
 <audio id="engineSound" autoplay loop>
   <source src="car-engine.mp3" type="audio/mpeg">
 </audio>
@@ -204,27 +225,29 @@ body {
   <div class="road">
     <div class="lane"></div>
   </div>
+
   <div class="light-streak" style="top:55%; animation-duration:1s;"></div>
   <div class="light-streak" style="top:60%; animation-duration:1.2s;"></div>
+
   <div class="fog"></div>
 
-  <!-- Car -->
-  <img src="c-image.png" alt="Sports Car" class="car">
+  <img src="c-image.png" class="car">
+
   <div class="flame"></div>
 
-  <!-- Text -->
   <div class="glow-text">Welcome to <strong>DriveHub</strong></div>
   <p class="tagline">"Freedom on Four Wheels"</p>
 
-  <!-- Button -->
-  <button class="enter-btn" onclick="window.location.href='login page.html'">Enter DriveHub</button>
+  <button class="enter-btn" onclick="window.location.href='login page.html'">
+    Enter DriveHub
+  </button>
 </div>
 
 <script>
 const engine = document.getElementById('engineSound');
 engine.volume = 0.4;
 engine.play().catch(()=>{
-  document.addEventListener('click',()=>engine.play(),{once:true});
+  document.addEventListener('click',() => engine.play(), {once:true});
 });
 </script>
 
